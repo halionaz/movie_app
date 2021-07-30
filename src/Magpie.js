@@ -1,4 +1,3 @@
-
 import PropTypes from 'prop-types';
 
 // 따로 설치한 npm 요소
