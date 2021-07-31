@@ -1,18 +1,27 @@
 import React from "react";
+import axios from "axios";
+
+import Movie from './Movie';
 
 //React.Component는 state를 가지고 있음
 
 class App extends React.Component{
   state = {
-    number : 0
+    isLoading : true,
+    movies : []
   }
-  add = () => {
-    this.setState(cur => ({ number : cur.number + 1 }))
+  getMovies = async () => {
+    const {
+      data : {
+        data : {movies}
+      }
+    } = await axios.get("https://yts-proxy.now.sh/list_movies.json?sort_by=rating");
+    console.log(movies);
+    this.setState({movies : movies})
   }
-  minus = () => {
-    this.setState({ number : this.state.number - 1})
-  }
-  componentDidMount(){
+  async componentDidMount(){
+    await this.getMovies();
+    this.setState({isLoading : false})
     console.log("방금 웹사이트가 처음으로 구현되었습니다.");
   }
   componentDidUpdate(){
@@ -23,12 +32,18 @@ class App extends React.Component{
     // 제일 마지막에 실행되어 console log를 볼 순 없음
   }
   render(){
-    const {number} = this.state;
+    const {isLoading, movies} = this.state;
     return <div>
-      <h1>I am Class Component : {this.state.number}</h1>
-      <h1>I am Class Component : {number}</h1>
-      <button onClick={this.add}>ADD</button>
-      <button onClick={this.minus}>MINUS</button>
+      <div>{isLoading ? "Loading" : movies.map(movie=>{
+        return <Movie 
+          key={movie.id}
+          id={movie.id} 
+          year={movie.year} 
+          title={movie.title} 
+          summary = {movie.summary} 
+          poster = {movie.medium_cover_image} 
+        />
+      })}</div>
     </div>
   }
 }
