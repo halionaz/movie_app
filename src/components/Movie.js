@@ -3,16 +3,6 @@ import {Link} from 'react-router-dom'
 
 function Movie({id,year,title,summary,poster,genres}){
     return (
-    <Link to={{
-        pathname : "/movie-detail",
-        state : {
-            year : year,
-            title : title,
-            summary : summary,
-            poster : poster,
-            genres : genres
-        }
-    }}>
         <div className="movie">
             <img src={poster} alt={title} title={title}></img>
             <h3 className="movie_title">{title}</h3>
@@ -22,9 +12,20 @@ function Movie({id,year,title,summary,poster,genres}){
                     return <li className="genres_genre" key={ind}>{genre}</li>
                 })}
             </ul>
+        <Link to={{
+            pathname : "/movie-detail",
+            state : {
+                year : year,
+                title : title,
+                summary : summary,
+                poster : poster,
+                genres : genres
+            }
+        }}>
             <p className="movie_summary">{summary}</p>
+        </Link>
         </div>
-    </Link>)
+    )
 }
 
 Movie.propTypes = {
